@@ -13,7 +13,7 @@ A modern ticket management application built with Angular 21, featuring drag-and
 
 ## Live Demo
 
-Visit the live application at: `https://qualityminds.github.io/`
+Visit the live application at: `https://qualityminds.github.io/Vibing/`
 
 ## Getting Started
 
