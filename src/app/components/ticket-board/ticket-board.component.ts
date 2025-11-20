@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
@@ -17,8 +17,8 @@ interface TicketsByList {
   styleUrls: ['./ticket-board.component.css']
 })
 export class TicketBoardComponent implements OnInit {
-  lists: TicketList[] = [];
-  ticketsByList: TicketsByList = {};
+  lists = signal<TicketList[]>([]);
+  ticketsByList = signal<TicketsByList>({});
   newTicketTitle: { [listId: string]: string } = {};
   newTicketDescription: { [listId: string]: string } = {};
   showAddForm: { [listId: string]: boolean } = {};
@@ -31,20 +31,23 @@ export class TicketBoardComponent implements OnInit {
   }
 
   async loadData(): Promise<void> {
-    this.lists = await this.db.getAllLists();
+    const lists = await this.db.getAllLists();
     const allTickets = await this.db.getAllTickets();
     
+    this.lists.set(lists);
+    
     // Group tickets by list
-    this.ticketsByList = {};
-    this.lists.forEach(list => {
-      this.ticketsByList[list.id] = allTickets
+    const grouped: TicketsByList = {};
+    lists.forEach(list => {
+      grouped[list.id] = allTickets
         .filter(ticket => ticket.listId === list.id)
         .sort((a, b) => a.order - b.order);
     });
+    this.ticketsByList.set(grouped);
   }
 
   getListIds(): string[] {
-    return this.lists.map(list => list.id);
+    return this.lists().map(list => list.id);
   }
 
   toggleAddForm(listId: string): void {
@@ -63,7 +66,7 @@ export class TicketBoardComponent implements OnInit {
       return;
     }
 
-    const tickets = this.ticketsByList[listId] || [];
+    const tickets = this.ticketsByList()[listId] || [];
     const order = tickets.length;
 
     const newTicket: Omit<Ticket, 'id'> = {
@@ -90,7 +93,7 @@ export class TicketBoardComponent implements OnInit {
   }
 
   async drop(event: CdkDragDrop<Ticket[]>): Promise<void> {
-    const listId = this.lists[this.getListIds().indexOf(event.container.id)]?.id;
+    const listId = this.lists()[this.getListIds().indexOf(event.container.id)]?.id;
     
     if (event.previousContainer === event.container) {
       // Reorder within same list
@@ -114,7 +117,7 @@ export class TicketBoardComponent implements OnInit {
         await this.db.moveTicket(ticket.id, listId, event.currentIndex);
         
         // Reorder the source list
-        const sourceListId = this.lists[this.getListIds().indexOf(event.previousContainer.id)]?.id;
+        const sourceListId = this.lists()[this.getListIds().indexOf(event.previousContainer.id)]?.id;
         const sourceTicketIds = event.previousContainer.data.map(t => t.id!);
         await this.db.reorderTickets(sourceListId, sourceTicketIds);
         

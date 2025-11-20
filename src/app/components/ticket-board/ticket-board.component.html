@@ -2,22 +2,22 @@
   <h1>Vibing - Ticket Board</h1>
   
   <div class="board-container" cdkDropListGroup>
-    <div class="list-column" *ngFor="let list of lists; trackBy: trackByListId">
+    <div class="list-column" *ngFor="let list of lists(); trackBy: trackByListId">
       <div class="list-header">
         <h2>{{ list.name }}</h2>
-        <span class="ticket-count">{{ ticketsByList[list.id]?.length || 0 }}</span>
+        <span class="ticket-count">{{ ticketsByList()[list.id]?.length || 0 }}</span>
       </div>
 
       <div
         cdkDropList
         [id]="list.id"
-        [cdkDropListData]="ticketsByList[list.id]"
+        [cdkDropListData]="ticketsByList()[list.id]"
         class="ticket-list"
         (cdkDropListDropped)="drop($event)">
         
         <div
           class="ticket-card"
-          *ngFor="let ticket of ticketsByList[list.id]; trackBy: trackByTicketId"
+          *ngFor="let ticket of ticketsByList()[list.id]; trackBy: trackByTicketId"
           cdkDrag>
           <div class="ticket-header">
             <h3>{{ ticket.title }}</h3>
