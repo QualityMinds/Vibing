@@ -1,58 +1,124 @@
-# VibingApp
+# Vibing
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.0.
+A modern ticket management application built with Angular 21, featuring drag-and-drop functionality and persistent storage using IndexedDB.
 
-## Development server
+## Features
+
+- 🎯 **Drag & Drop Ticket Management**: Organize tickets across three lists (To Do, In Progress, Done)
+- 💾 **Persistent Storage**: All data is saved locally using IndexedDB via Dexie.js
+- 🚀 **Modern Angular**: Built with Angular 21 using standalone components and signals
+- 📱 **Responsive Design**: Clean, modern UI that works on all devices
+- ⚡ **Real-time Updates**: State automatically syncs with IndexedDB
+- 🔄 **Auto-deployment**: Automatically deploys to GitHub Pages on every commit to main
+
+## Live Demo
+
+Visit the live application at: `https://qualityminds.github.io/Vibing/`
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20.x or later
+- npm 10.x or later
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/QualityMinds/Vibing.git
+cd Vibing
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+### Development server
 
 To start a local development server, run:
 
 ```bash
-ng serve
+npm start
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
+## Usage
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Creating a Ticket
+1. Click the "+ Add Ticket" button in any list
+2. Enter a title (required) and description (optional)
+3. Click "Save" or press Enter
 
-```bash
-ng generate component component-name
-```
+### Moving Tickets
+- Drag tickets between lists to change their status
+- Drag within a list to reorder tickets
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Deleting Tickets
+- Click the "×" button on any ticket to delete it
 
-```bash
-ng generate --help
-```
+All changes are automatically saved to IndexedDB and persist across browser sessions.
 
 ## Building
 
-To build the project run:
+To build the project for production:
 
 ```bash
-ng build
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+This will compile your project and store the build artifacts in the `dist/` directory.
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+For GitHub Pages deployment with proper base href:
 
 ```bash
-ng test
+npm run build -- --base-href=/Vibing/
 ```
 
-## Running end-to-end tests
+## Technology Stack
 
-For end-to-end (e2e) testing, run:
+- **Angular 21**: Modern web framework with standalone components
+- **Angular CDK**: For drag-and-drop functionality
+- **Dexie.js**: IndexedDB wrapper for persistent storage
+- **TypeScript**: Type-safe development
+- **GitHub Actions**: Automated CI/CD pipeline
 
-```bash
-ng e2e
+## Deployment
+
+The application automatically deploys to GitHub Pages when changes are pushed to the `main` branch. The deployment workflow:
+
+1. Builds the Angular application
+2. Uploads artifacts to GitHub Pages
+3. Deploys to the live site
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── components/
+│   │   └── ticket-board/      # Main ticket board component
+│   ├── models/
+│   │   └── ticket.model.ts    # Ticket data models
+│   ├── services/
+│   │   └── database.service.ts # Dexie.js database service
+│   └── app.ts                  # Root component
+└── styles.css                  # Global styles
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is open source and available under the MIT License.
 
 ## Additional Resources
 
