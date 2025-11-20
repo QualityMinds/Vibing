@@ -1,0 +1,61 @@
+<div class="ticket-board">
+  <h1>Vibing - Ticket Board</h1>
+  
+  <div class="board-container" cdkDropListGroup>
+    <div class="list-column" *ngFor="let list of lists; trackBy: trackByListId">
+      <div class="list-header">
+        <h2>{{ list.name }}</h2>
+        <span class="ticket-count">{{ ticketsByList[list.id]?.length || 0 }}</span>
+      </div>
+
+      <div
+        cdkDropList
+        [id]="list.id"
+        [cdkDropListData]="ticketsByList[list.id]"
+        class="ticket-list"
+        (cdkDropListDropped)="drop($event)">
+        
+        <div
+          class="ticket-card"
+          *ngFor="let ticket of ticketsByList[list.id]; trackBy: trackByTicketId"
+          cdkDrag>
+          <div class="ticket-header">
+            <h3>{{ ticket.title }}</h3>
+            <button class="delete-btn" (click)="deleteTicket(ticket.id)" title="Delete ticket">
+              ✕
+            </button>
+          </div>
+          <p class="ticket-description" *ngIf="ticket.description">{{ ticket.description }}</p>
+          <div class="ticket-footer">
+            <small>{{ ticket.createdAt | date: 'short' }}</small>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="add-ticket-section">
+        <button *ngIf="!showAddForm[list.id]" class="add-ticket-btn" (click)="toggleAddForm(list.id)">
+          + Add Ticket
+        </button>
+
+        <div *ngIf="showAddForm[list.id]" class="add-ticket-form">
+          <input
+            type="text"
+            [(ngModel)]="newTicketTitle[list.id]"
+            placeholder="Ticket title"
+            class="ticket-input"
+            (keyup.enter)="addTicket(list.id)">
+          <textarea
+            [(ngModel)]="newTicketDescription[list.id]"
+            placeholder="Description (optional)"
+            class="ticket-textarea"
+            rows="2"></textarea>
+          <div class="form-actions">
+            <button class="save-btn" (click)="addTicket(list.id)">Save</button>
+            <button class="cancel-btn" (click)="toggleAddForm(list.id)">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
